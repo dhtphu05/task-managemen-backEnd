@@ -1,3 +1,2 @@
-import { type Application } from 'express';
-export declare const app: Application;
+export {};
 //# sourceMappingURL=server.d.ts.map
