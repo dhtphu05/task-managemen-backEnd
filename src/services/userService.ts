@@ -14,16 +14,16 @@ const UpdateUserSchema = z.object({
 
 export const userService = {
   async getAllUsers(): Promise<User[]> {
-    return userModel.findAll();
+    return await userModel.findAll();
   },
 
   async createUser(input: unknown): Promise<User> {
     const validatedData = CreateUserSchema.parse(input);
-    return userModel.create(validatedData);
+    return await userModel.create(validatedData);
   },
 
   async getUserById(id: string): Promise<User | null> {
-    const user = userModel.findById(id);
+    const user = await userModel.findById(id);
     return user || null;
   },
 
@@ -33,10 +33,10 @@ export const userService = {
     const updateData = Object.fromEntries(
       Object.entries(validatedData).filter(([_, value]) => value !== undefined)
     ) as Partial<Omit<User, 'id' | 'createdAt'>>;
-    return userModel.update(id, updateData);
+    return await userModel.update(id, updateData);
   },
 
   async deleteUser(id: string): Promise<boolean> {
-    return userModel.delete(id);
+    return await userModel.delete(id);
   }
 };

@@ -13,4 +13,9 @@ const get = (key: string, fallback?: string) => {
 export const env = {
   NODE_ENV: get('NODE_ENV', 'development'),
   PORT: Number(get('PORT', '4000')),
+  ACCESS_TOKEN_SECRET: get('ACCESS_TOKEN_SECRET', 'dev-access-secret'),
+  REFRESH_TOKEN_SECRET: get('REFRESH_TOKEN_SECRET', 'dev-refresh-secret'),
+  ACCESS_TOKEN_EXPIRES_IN: get('ACCESS_TOKEN_EXPIRES_IN', '15m'),
+  REFRESH_TOKEN_EXPIRES_IN: get('REFRESH_TOKEN_EXPIRES_IN', '7d'),
+  DATABASE_URL: get('DATABASE_URL', 'postgres://postgres:postgres@localhost:5432/postgres'),
 };
