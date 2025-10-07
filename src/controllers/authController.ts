@@ -52,4 +52,7 @@ export const authController = {
       res.status(500).json(fail('Internal server error'));
     }
   },
+  async test(req: Request, res: Response): Promise<void> {
+    
+  }
 };
