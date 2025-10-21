@@ -128,4 +128,8 @@ export const authService = {
 
     return { id: userId, email };
   },
+
+  generateTokensForUser(user: User): AuthTokens {
+    return issueTokens(user);
+  },
 };

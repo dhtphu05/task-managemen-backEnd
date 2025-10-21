@@ -18,4 +18,7 @@ export const env = {
   ACCESS_TOKEN_EXPIRES_IN: get('ACCESS_TOKEN_EXPIRES_IN', '15m'),
   REFRESH_TOKEN_EXPIRES_IN: get('REFRESH_TOKEN_EXPIRES_IN', '7d'),
   DATABASE_URL: get('DATABASE_URL', 'postgres://postgres:postgres@localhost:5432/postgres'),
+  GOOGLE_CLIENT_ID: get('GOOGLE_CLIENT_ID'),
+  GOOGLE_CLIENT_SECRET: get('GOOGLE_CLIENT_SECRET'),
+  GOOGLE_REDIRECT_URI: get('GOOGLE_REDIRECT_URI', 'http://localhost:4000/auth/google/callback'),
 };
