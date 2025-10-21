@@ -42,6 +42,11 @@
     "skipLibCheck": true,
 
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+
+    // Decorators for TypeORM entities
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": false
   }
 }

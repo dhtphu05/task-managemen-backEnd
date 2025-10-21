@@ -1,6 +1,7 @@
 import { Router, type IRouter } from 'express';
 import { authController } from '../controllers/authController.js';
 import { authenticate } from '../middleware/auth.js';
+import { passport } from '../config/passport.js';
 
 export const authRoutes: IRouter = Router();
 
@@ -91,3 +92,11 @@ authRoutes.post('/logout', authController.logout);
  *         description: Unauthorized
  */
 authRoutes.get('/me', authenticate, authController.me);
+
+authRoutes.get(
+  '/google',
+  passport.authenticate('google', { scope: ['profile', 'email'], session: false })
+);
+
+authRoutes.get('/google/callback', authController.googleCallback);
+authRoutes.get('/google/failure', authController.googleFailure);

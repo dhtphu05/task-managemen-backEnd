@@ -1,7 +1,9 @@
-import { type Request, type Response } from 'express';
+import { type Request, type Response, type NextFunction } from 'express';
 import { authService } from '../services/authService.js';
 import { userService } from '../services/userService.js';
 import { ok, fail } from '../utils/http.js';
+import { passport } from '../config/passport.js';
+import type { User } from '../types/User.js';
 
 export const authController = {
   async login(req: Request, res: Response): Promise<void> {
@@ -51,5 +53,24 @@ export const authController = {
     } catch (error) {
       res.status(500).json(fail('Internal server error'));
     }
+  },
+  googleCallback(req: Request, res: Response, next: NextFunction): void {
+    passport.authenticate('google', { session: false }, (error: any, user?: User | false) => {
+      if (error) {
+        res.status(401).json(fail(error.message ?? 'Google authentication failed'));
+        return;
+      }
+
+      if (!user) {
+        res.status(401).json(fail('Google authentication failed'));
+        return;
+      }
+
+      const tokens = authService.generateTokensForUser(user);
+      res.json(ok({ user, ...tokens }));
+    })(req, res, next);
+  },
+  googleFailure(_req: Request, res: Response): void {
+    res.status(401).json(fail('Google authentication failed'));
   },
 };

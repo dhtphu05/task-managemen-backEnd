@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import { setupRoutes } from './routes/index.js';
 import { swaggerRouter } from './docs/swaggerConfig.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+import { passport } from './config/passport.js';
 
 export const app: Application = express();
 
@@ -14,6 +15,9 @@ app.use(cors());
 // Body parsing middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Authentication middleware
+app.use(passport.initialize());
 
 // Setup all routes
 setupRoutes(app);
