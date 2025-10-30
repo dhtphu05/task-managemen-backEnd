@@ -28,6 +28,18 @@ const options: swaggerJsdoc.Options = {
       {
         name: 'Users', 
         description: 'User management endpoints'
+      },
+      {
+        name: 'Workspaces',
+        description: 'Workspace CRUD operations'
+      },
+      {
+        name: 'Projects',
+        description: 'Project CRUD operations'
+      },
+      {
+        name: 'Boards',
+        description: 'Board CRUD operations'
       }
     ]
   },
