@@ -3,6 +3,7 @@ import { authService } from '../services/authService.js';
 import { userService } from '../services/userService.js';
 import { ok, fail } from '../utils/http.js';
 import { passport } from '../config/passport.js';
+import { env } from '../config/env.js';
 import type { User } from '../types/User.js';
 
 export const authController = {
@@ -56,18 +57,46 @@ export const authController = {
   },
   googleCallback(req: Request, res: Response, next: NextFunction): void {
     passport.authenticate('google', { session: false }, (error: any, user?: User | false) => {
+      const fallbackBase = env.FRONTEND_URL.replace(/\/+$/, '');
+      const fallbackCallback = `${fallbackBase}/react-app/oauth/callback`;
+      const requestedCallback =
+        typeof req.query.redirect_uri === 'string' && req.query.redirect_uri.length > 0
+          ? req.query.redirect_uri
+          : fallbackCallback;
+
+      const buildRedirectUrl = (searchParams: Record<string, string | undefined>): string => {
+        const url = new URL(requestedCallback);
+        const params = url.searchParams;
+        Object.entries(searchParams).forEach(([key, value]) => {
+          if (value !== undefined && value !== '') {
+            params.set(key, value);
+          }
+        });
+        url.search = params.toString();
+        return url.toString();
+      };
+
       if (error) {
-        res.status(401).json(fail(error.message ?? 'Google authentication failed'));
+        const errorMessage = error.message ?? 'Google authentication failed';
+        res.redirect(buildRedirectUrl({ error: errorMessage }));
         return;
       }
 
       if (!user) {
-        res.status(401).json(fail('Google authentication failed'));
+        res.redirect(buildRedirectUrl({ error: 'Google authentication failed' }));
         return;
       }
 
       const tokens = authService.generateTokensForUser(user);
-      res.json(ok({ user, ...tokens }));
+      const redirectPath = typeof req.query.redirect === 'string' ? req.query.redirect : undefined;
+
+      res.redirect(
+        buildRedirectUrl({
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
+          redirect: redirectPath,
+        })
+      );
     })(req, res, next);
   },
   googleFailure(_req: Request, res: Response): void {

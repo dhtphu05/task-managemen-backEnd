@@ -21,4 +21,5 @@ export const env = {
   GOOGLE_CLIENT_ID: get('GOOGLE_CLIENT_ID'),
   GOOGLE_CLIENT_SECRET: get('GOOGLE_CLIENT_SECRET'),
   GOOGLE_REDIRECT_URI: get('GOOGLE_REDIRECT_URI', 'http://localhost:4000/auth/google/callback'),
+  FRONTEND_URL: get('FRONTEND_URL', 'http://localhost:5173'),
 };
